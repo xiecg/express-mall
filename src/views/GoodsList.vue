@@ -30,7 +30,7 @@
               <ul>
                 <li v-for="(item, index) in goodsList">
                   <div class="pic">
-                    <a href="#"><img v-lazy="`/static/${item.prodcutImg}`" alt=""></a>
+                    <a href="#"><img v-lazy="`/static/${item.productImage}`" alt=""></a>
                   </div>
                   <div class="main">
                     <div class="name">{{ item.name }}</div>
@@ -87,7 +87,8 @@
     methods: {
       getGoodsList () {
         axios.get('/goods').then(result => {
-          this.goodsList = result.data.result;
+          const { list } = result.data.result
+          this.goodsList = list;
         });
       },
       setPriceFilter (index) {
