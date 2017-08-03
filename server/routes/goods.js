@@ -20,15 +20,21 @@ mongoose.connection.on('disconnected', () => {
 });
 
 router.get('/', function(req, res, next) {
-  Goods.find({}, (err, doc) => {
+  const page = Number(req.param('page'));
+  const pageSize = Number(req.param('pageSize'));
+  const sort = req.param('sort');
+  const skip = (page - 1) * pageSize;
+  const params = {};
+  const goodsModel = Goods.find(params).skip(skip).limit(pageSize);
+
+  goodsModel.sort({ salePrice: sort });
+  goodsModel.exec((err, doc) => {
     if (err) {
       res.json({ status: 1, msg: res.messgae });
     } else {
       res.json({ status: 0, msg: '', result: { count: doc.length, list: doc } });
     }
   });
-  // res.send('hello, goods');
-  // res.render('index', { title: 'Express,Very Goood' });
 });
 
 module.exports = router;
