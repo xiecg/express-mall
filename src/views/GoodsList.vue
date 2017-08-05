@@ -17,7 +17,7 @@
           <div class="filter stopPop" id="filter" :class="{'filterby-show': filterBy}">
             <dl class="filter-price">
               <dt>Price:</dt>
-              <dd><a href="javascript:void(0)" @click="priceChecked = 'all'" :class="{cur: priceChecked == 'all'}" >All</a></dd>
+              <dd><a href="javascript:void(0)" @click="setPriceFilter('all')" :class="{cur: priceChecked == 'all'}" >All</a></dd>
               <dd v-for="(price, index) in priceFilter" >
                 <a href="javascript:void(0)" @click="setPriceFilter(index)" :class="{cur: priceChecked == index}">{{ price.startPrice }} - {{ price.endPrice }}</a>
               </dd>
@@ -36,12 +36,14 @@
                     <div class="name">{{ item.productName }}</div>
                     <div class="price">{{ item.salePrice }}</div>
                     <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                      <a href="javascript:;" @click="addCart(item.productId)" class="btn btn--m">加入购物车</a>
                     </div>
                   </div>
                 </li>
               </ul>
-              <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">加载中 ...</div>
+              <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30" class="load-more">
+                <img src="./../assets/loading-spinning-bubbles.svg" v-show="loading">
+              </div>
             </div>
           </div>
         </div>
@@ -66,16 +68,20 @@
         page: 1,
         pageSize: 8,
         busy: true,
+        loading: false,
         priceChecked: 'all',
         priceFilter: [{
           startPrice: '0.00',
+          endPrice: '100.00',
+        },{
+          startPrice: '100.00',
           endPrice: '500.00',
         },{
           startPrice: '500.00',
           endPrice: '1000.00',
         },{
           startPrice: '1000.00',
-          endPrice: '2000.00',
+          endPrice: '5000.00',
         }],
         filterBy: false,
         overLayFlag: false
@@ -94,12 +100,15 @@
         const params = {
           page: this.page,
           pageSize: this.pageSize,
-          sort: this.sortFlag ? 1 : -1
+          sort: this.sortFlag ? 1 : -1,
+          priceLevel: this.priceChecked
         };
-        axios.get('/goods', {
+        this.loading = true;
+        axios.get('/goods/list', {
           params,
         }).then(result => {
           const { list, count } = result.data.result
+          this.loading = false;
           if (flag) {
             this.goodsList = this.goodsList.concat(list);
             this.busy = count ? false : true;
@@ -116,7 +125,9 @@
       },
       setPriceFilter (index) {
         this.priceChecked = index;
+        this.page = 1;
         this.closePop();
+        this.getGoodsList();
       },
       showFilterPop () {
         this.filterBy = true;
@@ -127,12 +138,23 @@
         this.overLayFlag = false;
       },
       loadMore () {
-        
         setTimeout(() => {
           this.page++;
           this.getGoodsList(true);
           this.busy = true;
         }, 500);
+      },
+      addCart (productId) {
+        axios.post('/goods/addCart', {
+          productId,
+        }).then(result => {
+          result = result.data;
+          if (result.status) {
+            alert(`加入失败 msg: ${ result.msg }`);
+          } else {
+            alert('加入成功');
+          }
+        });
       }
     }
   }

@@ -6,7 +6,9 @@ const produtSchema = new Schema({
   productId: String,
   productName: String,
   salePrice: Number,
-  productImage: String
+  productImage: String,
+  checked: Boolean,
+  productNum: Number,
 });
 
 module.exports = mongoose.model('Good', produtSchema);

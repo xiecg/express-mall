@@ -14,9 +14,9 @@
       <div class="navbar-right-container" style="display: flex;">
         <div class="navbar-menu-container">
           <!--<a href="/" class="navbar-link">我的账户</a>-->
-          <span class="navbar-link"></span>
-          <a href="javascript:void(0)" class="navbar-link">Login</a>
-          <a href="javascript:void(0)" class="navbar-link">Logout</a>
+          <span class="navbar-link" v-if="nickName">{{nickName}}</span>
+          <a href="javascript:void(0)" @click="loginModalFlag=true" v-if="!nickName" class="navbar-link">Login</a>
+          <a href="javascript:void(0)" @click="logOut()" class="navbar-link" v-if="nickName">Logout</a>
           <div class="navbar-cart-container">
             <span class="navbar-cart-count"></span>
             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -28,13 +28,87 @@
         </div>
       </div>
     </div>
+
+    <div class="md-modal modal-msg md-modal-transition" :class="{'md-show': loginModalFlag}">
+      <div class="md-modal-inner">
+        <div class="md-top">
+          <div class="md-title">Login in</div>
+          <button class="md-close" @click="loginModalFlag=false">Close</button>
+        </div>
+        <div class="md-content">
+          <div class="confirm-tips">
+            <div class="error error-wrap" v-show="errorTip">用户名或密码错误</div>
+            <ul>
+              <li class="regi_form_input"><i class="icon IconPeople"></i>
+                <input type="text" tabindex="1" v-model="userName" name="loginname" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left">
+              </li>
+              <li class="regi_form_input noMargin"><i class="icon IconPwd"></i>
+                <input type="password" tabindex="2" v-model="userPwd" name="password" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text">
+              </li>
+            </ul>
+          </div>
+          <div class="login-wrap"><a href="javascript:;" @click="login()" class="btn-login">登  录</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="md-overlay" v-show="loginModalFlag" @click="loginModalFlag=false"></div>
+
   </header>
 </template>
 
 <script>
+
+import axios from 'axios';
+
 export default {
   data () {
-    return {}
+    return {
+      userName: '',
+      userPwd: '',
+      errorTip: false,
+      loginModalFlag: false,
+      nickName: '',
+    }
+  },
+  mounted () {
+    this.checkLogin();
+  },
+  methods: {
+    checkLogin () {
+      axios.get('/users/checkLogin').then(result => {
+        result = result.data;
+        if (!result.status) {
+          this.nickName = result.result;
+        }
+      });
+    },
+    login () {
+      if (!this.userName || !this.userPwd) {
+        this.errorTip = true;
+        return;
+      }
+      axios.post('/users/login', {
+        userName: this.userName,
+        userPwd: this.userPwd
+      }).then(result => {
+        result = result.data;
+        if (result.status) {
+          this.errorTip = true;
+        } else {
+          this.errorTip = false;
+          this.loginModalFlag = false;
+          this.nickName = result.result.userName;
+        }
+      });
+    },
+    logOut () {
+      axios.post('/users/logout').then(result => {
+        result = result.data;
+        if (!result.status) {
+          this.nickName = '';
+        }
+      });
+    }
   }
 }
 </script>

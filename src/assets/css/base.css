@@ -1306,3 +1306,7 @@ html {
     font-size: 12px;
   }
 }
+
+.load-more {
+  text-align: center;
+}
