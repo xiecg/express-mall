@@ -43,7 +43,7 @@
                 <input type="text" tabindex="1" v-model="userName" name="loginname" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left">
               </li>
               <li class="regi_form_input noMargin"><i class="icon IconPwd"></i>
-                <input type="password" tabindex="2" v-model="userPwd" name="password" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text">
+                <input type="password" tabindex="2" @keyup.enter="login()" v-model="userPwd" name="password" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text">
               </li>
             </ul>
           </div>
