@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NavHeader></NavHeader>
-    <NavBread></NavBread>
+    <nav-header></nav-header>
+    <nav-bread></nav-bread>
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
         <symbol id="icon-add" viewBox="0 0 32 32">
@@ -119,21 +119,21 @@
                 Item total: <span class="total-price">{{totalPrice | currency('$')}}</span>
               </div>
               <div class="btn-wrap">
-                <a class="btn btn--red">Checkout</a>
+                <a class="btn btn--red" :class="{'btn--dis': checkedCount == 0}" @click="checkOut()">Checkout</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Modal :mdShow="modalConfirm" @close="closeModal">
+    <modal :mdShow="modalConfirm" @close="closeModal">
       <p slot="message">确定要删除此条数据吗 ?</p>
       <div slot="btnGroup">
         <a href="javascript:void(0);" @click="delCart()" class="btn btn--m">确认</a>
         <a href="javascript:void(0);" @click="closeModal()" class="btn btn--m">关闭</a>
       </div>
-    </Modal>
-    <NavFooter></NavFooter>
+    </modal>
+    <nav-footer></nav-footer>
   </div>
 </template>
 <style>
@@ -266,6 +266,13 @@
             alert('服务器错误');
           }
         });
+      },
+      checkOut () {
+        if (this.checkedCount > 0) {
+          this.$router.push({
+            path: '/address'
+          });
+        }
       }
     }
   }

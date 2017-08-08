@@ -117,4 +117,61 @@ router.post('/cartEditCheckAll', (req, res, next) => {
   });
 });
 
+/* 获取用户地址 */
+router.get('/addressList', (req, res, next) => {
+  const userId = req.cookies.userId;
+  User.findOne({userId}, (err, doc) => {
+    if (err) {
+      res.json({ status: 1, msg: res.messgae });
+    } else {
+      res.json({ status: 0, msg: '', result: doc.addressList });
+    }
+  });
+});
+
+/* 设置默认地址 */
+router.post('/setDefault', (req, res, next) => {
+  const userId = req.cookies.userId;
+  const body = req.body;
+  const addressId = body.addressId;
+  User.findOne({userId}, (err, doc) => {
+    if (err) {
+      res.json({ status: 1, msg: res.messgae });
+    } else {
+      const addressList = doc.addressList;
+      addressList.forEach(item => {
+        if (item.addressId == addressId) {
+          item.isDefault = true;
+        } else {
+          item.isDefault = false;
+        }
+      });
+      doc.save((err, doc) => {
+        if (err) {
+          res.json({ status: 1, msg: res.messgae });
+        } else {
+          res.json({ status: 0, msg: '', result: 'success' });
+        }
+      });
+    }
+  });
+});
+
+/* 删除地址 */
+router.post('/delAddress', (req, res, next) => {
+  const userId = req.cookies.userId;
+  const body = req.body;
+  const addressId = body.addressId;
+  User.update({ userId }, { $pull: {
+    addressList: { addressId }
+  } }, (err, doc) => {
+    if (err) {
+      res.json({ status: 1, msg: res.messgae });
+    } else {
+      res.json({ status: 0, msg: '', result: 'success' });
+    }
+  });
+});
+
+
 module.exports = router;
