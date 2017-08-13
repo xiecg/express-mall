@@ -66,7 +66,6 @@
         <div><a href="javascript:;" @click="mdShowCart=false" class="btn btn--m">继续购物</a> <a href="/#/cart" class="btn btn--m btn--red">查看购物车</a></div>
       </div>
     </modal>
-    
     <nav-footer></nav-footer>
   </div>
 </template>
