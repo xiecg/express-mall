@@ -119,6 +119,24 @@ router.post('/cartEditCheckAll', (req, res, next) => {
   });
 });
 
+
+/* 获取购物车数量 */
+router.get('/getCartCount', (req, res, next) => {
+  const userId = req.cookies.userId;
+  User.findOne({userId}, (err, doc) => {
+    if (err) {
+      res.json({ status: 1, msg: res.messgae });
+    } else {
+      let cartList = doc.cartList;
+      let cartCount = 0;
+      cartCount = cartList.reduce((count, item) => {
+        return count + Number(item.productNum);
+      }, cartCount);
+      res.json({ status: 0, msg: '', result: cartCount });
+    }
+  });
+});
+
 /* 获取地址 */
 router.get('/addressList', (req, res, next) => {
   const userId = req.cookies.userId;

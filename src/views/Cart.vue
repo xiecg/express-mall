@@ -91,7 +91,7 @@
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
-                    <a href="javascript:;" class="item-edit-btn" @click="delCartConfirm(item.productId)">
+                    <a href="javascript:;" class="item-edit-btn" @click="delCartConfirm(item, item.productId)">
                       <svg class="icon icon-del">
                         <use xlink:href="#icon-del"></use>
                       </svg>
@@ -215,9 +215,10 @@
       closeModal () {
         this.modalConfirm = false;
       },
-      delCartConfirm (productId) {
+      delCartConfirm (item, productId) {
         this.modalConfirm = true;
         this.productId = productId;
+        this.productItem = item;
       },
       delCart () {
         axios.post('/users/cartDel', {
@@ -228,6 +229,7 @@
             this.productId = '';
             this.modalConfirm = false;
             this.init();
+            this.$store.commit('updateCartCount', -this.productItem.productNum);
           }
         });
       },
@@ -248,6 +250,7 @@
           checked: item.checked,
         }).then(result => {
           result = result.data;
+          this.$store.commit('updateCartCount', type == 'add' ? 1 : -1);
           if (result.status) {
             alert('服务器错误');
           }

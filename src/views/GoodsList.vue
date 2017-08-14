@@ -174,6 +174,7 @@
             this.mdShow = true;
           } else {
             this.mdShowCart = true;
+            this.$store.commit('updateCartCount', 1);
           }
         });
       },
