@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "expressMall",
-      "script": "index.html",
+      "script": "app.js",
       "env": {
         "COMMON_VARIABLE": "true"
       },
