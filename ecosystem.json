@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "rexpressMall",
-      "script": "app.js",
+      "script": "index.html",
       "env": {
         "COMMON_VARIABLE": "true"
       },
