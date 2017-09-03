@@ -1,0 +1,28 @@
+{
+  "apps": [
+    {
+      "name": "rexpressMall",
+      "script": "app.js",
+      "env": {
+        "COMMON_VARIABLE": "true"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    }
+  ],
+  "deploy": {
+    "production": {
+      "user" : "xiecg",
+      "host": ["121.196.200.74"],
+      "port": "39999",
+      "ref": "origin/master",
+      "repo": "git@github.com:xiecg/express-mall.git",
+      "path": "/www/expressmall/production",
+      "ssh_options": "StrictHostKeyChecking=no",
+      "env" : {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}

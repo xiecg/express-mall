@@ -29,3 +29,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 3. `PORT=3030 node /server/bin/www`
 
 4. `npm run dev`
+
+## deploy
+
+1. `pm2 deploy ecosystem.json production setup`
