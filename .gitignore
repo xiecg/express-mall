@@ -61,6 +61,7 @@ typings/
 .DS_Store
 node_modules/
 dist/
+server/views/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
