@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose');
+const mongoClient = require('./index');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
@@ -25,4 +26,4 @@ const userSchema = Schema({
   }]
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoClient.model('User', userSchema, 'users');

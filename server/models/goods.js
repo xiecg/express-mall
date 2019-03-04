@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose');
+const mongoClient = require('./index');
 const Schema = mongoose.Schema;
 
 const produtSchema = new Schema({
@@ -11,4 +12,4 @@ const produtSchema = new Schema({
   productNum: Number,
 });
 
-module.exports = mongoose.model('Good', produtSchema);
+module.exports = mongoClient.model('Good', produtSchema, 'goods');

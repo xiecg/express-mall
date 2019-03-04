@@ -1,24 +1,9 @@
 
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+const mongoose = require('../models/index');
 const Goods = require('../models/goods');
 const User = require('../models/user');
-
-// 链接 MongoDB 数据库
-mongoose.connect('mongodb://127.0.0.1:27017/expressmall');
-
-mongoose.connection.on('connected', () => {
-  console.log('MongoDB connected success.');
-});
-
-mongoose.connection.on('error', () => {
-  console.log('MongoDB connected fail.');
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB connected disconnected.');
-});
 
 const getPriceLevel = level => {
   const res = [[0, 100], [100, 500], [500, 1000], [1000, 5000]];
@@ -34,6 +19,7 @@ const getPriceLevel = level => {
 router.get('/list', (req, res, next) => {
   const page = Number(req.param('page'));
   const pageSize = Number(req.param('pageSize'));
+  console.log(page, pageSize);
   const priceLevel = getPriceLevel(req.param('priceLevel'));
   const sort = req.param('sort');
   const skip = (page - 1) * pageSize;

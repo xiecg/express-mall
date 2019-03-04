@@ -1,0 +1,7 @@
+apps:
+  - script   : 'server/bin/www'
+    name     : 'EXPRESS-MALL'
+    exec_mode: 'fork'
+    env:
+      PORT: 3030
+      ENV: 'production'
